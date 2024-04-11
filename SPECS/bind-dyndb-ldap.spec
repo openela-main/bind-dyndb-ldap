@@ -12,7 +12,7 @@
 
 Name:           bind-dyndb-ldap
 Version:        11.9
-Release:        8%{?dist}
+Release:        8%{?dist}.3
 Summary:        LDAP back-end plug-in for BIND
 
 License:        GPLv2+
@@ -22,6 +22,8 @@ Source1:        https://releases.pagure.org/%{name}/%{name}-%{VERSION}.tar.bz2.a
 
 Patch1:         bind-dyndb-ldap-11.9-bind-9.16.17.patch
 Patch2:         0001-Modify-empty-zone-conflicts-under-exclusive-mode_rhbz#2129844.patch
+# https://pagure.io/bind-dyndb-ldap/pull-request/229
+Patch3:         https://pagure.io/bind-dyndb-ldap/raw/dbbcc2f07ea6955c6b0b5a719f8058c54b1d750c#/bind-dyndb-ldap-11.9-bind-CVE-2023-50387.patch
 
 BuildRequires:  bind-devel >= %{bind_version}, bind-lite-devel >= %{bind_version}
 BuildRequires:  krb5-devel
@@ -117,6 +119,12 @@ sed -i.bak -e "$SEDSCRIPT" /etc/named.conf
 
 
 %changelog
+* Tue Mar 12 2024 Petr Menšík <pemensik@redhat.com> - 11.9-8.3
+- Rebuild with correct z-stream tag again
+
+* Thu Feb 22 2024 Petr Menšík <pemensik@redhat.com> - 11.9-8.2
+- Rebuild required for BIND changes for KeyTrap change (CVE-2023-50387)
+
 * Wed Oct 19 2022 Rafael Jeffman <rjeffman<redhat.com> - 11.9-8
 - Modify empty zone conflicts under exclusive mode
   Resolves: rhbz#2129844, rhbz#2130614
