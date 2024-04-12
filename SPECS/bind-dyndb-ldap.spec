@@ -11,7 +11,7 @@
 
 Name:           bind-dyndb-ldap
 Version:        11.6
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        LDAP back-end plug-in for BIND
 
 Group:          System Environment/Libraries
@@ -22,6 +22,7 @@ Source1:        https://releases.pagure.org/%{name}/%{name}-%{VERSION}.tar.bz2.a
 
 Patch0001:      0001-Modify-empty-zone-conflicts-under-exclusive-mode_rhbz#2133036.patch
 Patch0002:      0002-add-rwlock-before-include-zt-h.patch
+Patch0003:      0003-bind-dyndb-ldap-11.9-bind-CVE-2023-50387.patch
 
 BuildRequires:  bind-devel >= %{bind_version}, bind-lite-devel >= %{bind_version}, bind-pkcs11-devel >= %{bind_version}
 BuildRequires:  krb5-devel
@@ -114,6 +115,10 @@ sed -i.bak -e "$SEDSCRIPT" /etc/named.conf
 
 
 %changelog
+* Thu Mar 28 2024 Rafael Jeffman <rjeffman@redhat.com> - 11.6-5
+- Rebuild due to Bind ABI changes (CVE 2023-50387).
+  Resolves: RHEL-28847
+
 * Thu Oct 13 2022 Rafael Jeffman <rjeffman@redhat.com> - 11.6-4
 - Modify empty zone conflicts under exclusive mode
   Resolves: rhbz#2126877
