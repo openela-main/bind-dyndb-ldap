@@ -12,7 +12,7 @@
 
 Name:           bind-dyndb-ldap
 Version:        11.9
-Release:        8%{?dist}.3
+Release:        9%{?dist}
 Summary:        LDAP back-end plug-in for BIND
 
 License:        GPLv2+
@@ -119,10 +119,7 @@ sed -i.bak -e "$SEDSCRIPT" /etc/named.conf
 
 
 %changelog
-* Tue Mar 12 2024 Petr Menšík <pemensik@redhat.com> - 11.9-8.3
-- Rebuild with correct z-stream tag again
-
-* Thu Feb 22 2024 Petr Menšík <pemensik@redhat.com> - 11.9-8.2
+* Thu Feb 22 2024 Petr Menšík <pemensik@redhat.com> - 11.9-9
 - Rebuild required for BIND changes for KeyTrap change (CVE-2023-50387)
 
 * Wed Oct 19 2022 Rafael Jeffman <rjeffman<redhat.com> - 11.9-8
