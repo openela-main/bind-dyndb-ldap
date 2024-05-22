@@ -1,6 +1,6 @@
 %define VERSION %{version}
 
-%define bind_version 32:9.11.26-1
+%define bind_version 32:9.11.36-14
 
 %if 0%{?fedora} >= 31 || 0%{?rhel} >= 9
     %global openssl_pkcs11_version 0.4.10-2
@@ -115,9 +115,9 @@ sed -i.bak -e "$SEDSCRIPT" /etc/named.conf
 
 
 %changelog
-* Thu Mar 28 2024 Rafael Jeffman <rjeffman@redhat.com> - 11.6-5
-- Rebuild due to Bind ABI changes (CVE 2023-50387).
-  Resolves: RHEL-28847
+* Tue Apr 02 2024 Rafael Jeffman <rjeffman@redhat.com> - 11.6-5
+- Rebuild due to Bind ABI changes.
+  Resolves: RHEL-28842
 
 * Thu Oct 13 2022 Rafael Jeffman <rjeffman@redhat.com> - 11.6-4
 - Modify empty zone conflicts under exclusive mode
