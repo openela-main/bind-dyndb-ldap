@@ -1,7 +1,8 @@
 
 %define VERSION %{version}
 
-%define bind_version 32:9.11.17-1
+# dns_name_t changed size in that build, bind9 CVE-2023-50387
+%define bind_version 32:9.16.23-16
 
 %if 0%{?fedora} >= 31 || 0%{?rhel} > 8
     %global openssl_pkcs11_version 0.4.10-6
@@ -12,7 +13,7 @@
 
 Name:           bind-dyndb-ldap
 Version:        11.9
-Release:        9%{?dist}
+Release:        10%{?dist}
 Summary:        LDAP back-end plug-in for BIND
 
 License:        GPLv2+
@@ -24,6 +25,8 @@ Patch1:         bind-dyndb-ldap-11.9-bind-9.16.17.patch
 Patch2:         0001-Modify-empty-zone-conflicts-under-exclusive-mode_rhbz#2129844.patch
 # https://pagure.io/bind-dyndb-ldap/pull-request/229
 Patch3:         https://pagure.io/bind-dyndb-ldap/raw/dbbcc2f07ea6955c6b0b5a719f8058c54b1d750c#/bind-dyndb-ldap-11.9-bind-CVE-2023-50387.patch
+# https://pagure.io/bind-dyndb-ldap/pull-request/235
+Patch4:         bind-dyndb-ldap-11.10-bind-CVE-2024-1737.patch
 
 BuildRequires:  bind-devel >= %{bind_version}, bind-lite-devel >= %{bind_version}
 BuildRequires:  krb5-devel
@@ -119,6 +122,9 @@ sed -i.bak -e "$SEDSCRIPT" /etc/named.conf
 
 
 %changelog
+* Wed Aug 07 2024 Petr Menšík <pemensik@redhat.com> - 11.9-10
+- Rebuilt for BIND CVE-2024-1737 fixes (CVE-2024-1737)
+
 * Thu Feb 22 2024 Petr Menšík <pemensik@redhat.com> - 11.9-9
 - Rebuild required for BIND changes for KeyTrap change (CVE-2023-50387)
 
