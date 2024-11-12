@@ -1,8 +1,7 @@
 
 %define VERSION %{version}
 
-# dns_name_t changed size in that build, bind9 CVE-2023-50387
-%define bind_version 32:9.16.23-16
+%define bind_version 32:9.16.23-19
 
 %if 0%{?fedora} >= 31 || 0%{?rhel} > 8
     %global openssl_pkcs11_version 0.4.10-6
