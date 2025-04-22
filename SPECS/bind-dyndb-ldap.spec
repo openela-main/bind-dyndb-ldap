@@ -11,7 +11,7 @@
 
 Name:           bind-dyndb-ldap
 Version:        11.6
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        LDAP back-end plug-in for BIND
 
 Group:          System Environment/Libraries
@@ -44,11 +44,7 @@ off of your LDAP server.
 
 
 %prep
-%setup -q -n %{name}-%{VERSION}
-
-for p in %patches; do
-    %__patch -p1 -i $p
-done
+%autosetup -n %{name}-%{VERSION} -p1
 
 %build
 autoreconf -fiv
@@ -115,6 +111,10 @@ sed -i.bak -e "$SEDSCRIPT" /etc/named.conf
 
 
 %changelog
+* Thu Apr 03 2025 Rafael Jeffman <rjeffman@redhat.com> - 11.6-6
+- Fix rpminspect warnings
+  Resolves: RHEL-22497
+
 * Tue Apr 02 2024 Rafael Jeffman <rjeffman@redhat.com> - 11.6-5
 - Rebuild due to Bind ABI changes.
   Resolves: RHEL-28842
