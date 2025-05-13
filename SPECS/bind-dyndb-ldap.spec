@@ -1,18 +1,26 @@
 
 %define VERSION %{version}
 
+%define bind_name bind
 %define bind_version 32:9.16.23-19
 
 %if 0%{?fedora} >= 31 || 0%{?rhel} > 8
+%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10
+    %global openssl_pkcs11_version 0.3
+    %global openssl_pkcs11_name pkcs11-provider
+    %global softhsm_version 2.6.1
+%else
     %global openssl_pkcs11_version 0.4.10-6
+    %global openssl_pkcs11_name openssl-pkcs11
     %global softhsm_version 2.5.0-4
+%endif
 %else
     %global with_bind_pkcs11 1
 %endif
 
 Name:           bind-dyndb-ldap
-Version:        11.9
-Release:        10%{?dist}
+Version:        11.11
+Release:        3%{?dist}
 Summary:        LDAP back-end plug-in for BIND
 
 License:        GPLv2+
@@ -20,30 +28,27 @@ URL:            https://releases.pagure.org/bind-dyndb-ldap
 Source0:        https://releases.pagure.org/%{name}/%{name}-%{VERSION}.tar.bz2
 Source1:        https://releases.pagure.org/%{name}/%{name}-%{VERSION}.tar.bz2.asc
 
-Patch1:         bind-dyndb-ldap-11.9-bind-9.16.17.patch
-Patch2:         0001-Modify-empty-zone-conflicts-under-exclusive-mode_rhbz#2129844.patch
-# https://pagure.io/bind-dyndb-ldap/pull-request/229
-Patch3:         https://pagure.io/bind-dyndb-ldap/raw/dbbcc2f07ea6955c6b0b5a719f8058c54b1d750c#/bind-dyndb-ldap-11.9-bind-CVE-2023-50387.patch
-# https://pagure.io/bind-dyndb-ldap/pull-request/235
-Patch4:         bind-dyndb-ldap-11.10-bind-CVE-2024-1737.patch
-
-BuildRequires:  bind-devel >= %{bind_version}, bind-lite-devel >= %{bind_version}
+BuildRequires:  %{bind_name}-devel >= %{bind_version}, %{bind_name}-lite-devel >= %{bind_version}
 BuildRequires:  krb5-devel
 BuildRequires:  openldap-devel
 BuildRequires:  libuuid-devel
 BuildRequires:  automake, autoconf, libtool
+BuildRequires:  autoconf-archive
+
+# https://bugzilla.redhat.com/show_bug.cgi?id=2165256
+Conflicts: bind9-next
 
 %if %{with bind_pkcs11}
-BuildRequires:  bind-pkcs11-devel >= %{bind_version}
+BuildRequires:  %{bind_name}-pkcs11-devel >= %{bind_version}
 BuildRequires: make
-Requires(pre): bind-pkcs11 >= %{bind_version}
-Requires: bind-pkcs11 >= %{bind_version}
-Requires: bind-pkcs11-utils >= %{bind_version}
+Requires(pre): %{bind_name}-pkcs11 >= %{bind_version}
+Requires: %{bind_name}-pkcs11 >= %{bind_version}
+Requires: %{bind_name}-pkcs11-utils >= %{bind_version}
 %else
 Requires: softhsm >= %{softhsm_version}
-Requires: openssl-pkcs11 >= %{openssl_pkcs11_version}
-Requires(pre): bind >= %{bind_version}
-Requires: bind >= %{bind_version}
+Requires: %{openssl_pkcs11_name} >= %{openssl_pkcs11_version}
+Requires(pre): %{bind_name} >= %{bind_version}
+Requires: %{bind_name} >= %{bind_version}
 %endif
 
 %description
@@ -121,6 +126,21 @@ sed -i.bak -e "$SEDSCRIPT" /etc/named.conf
 
 
 %changelog
+* Thu Mar 20 2025 Thomas Woerner <twoerner@redhat.com> - 11.11-3
+- Drop obsoletes for bind, switch back to bind 32:9.16.23-19 requirement
+  Resolves: RHEL-80345
+
+* Wed Feb 12 2025 Thomas Woerner <twoerner@redhat.com> - 11.11-2
+- Release bump, fixed date for previous changelog entry
+  Resolves: RHEL-78927
+
+* Tue Feb 11 2025 Thomas Woerner <twoerner@redhat.com> - 11.11-1
+- Release 11.11, Support BIND 9.18
+  Resolves: RHEL-78927
+
+* Fri Sep 06 2024 Petr Menšík <pemensik@redhat.com> - 11.9-11
+- Bump version above RHEL 9.5
+
 * Wed Aug 07 2024 Petr Menšík <pemensik@redhat.com> - 11.9-10
 - Rebuilt for BIND CVE-2024-1737 fixes (CVE-2024-1737)
 
