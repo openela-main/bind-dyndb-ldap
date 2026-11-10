@@ -2,7 +2,7 @@
 %define VERSION %{version}
 
 %define bind_name bind
-%define bind_version 32:9.16.23-19
+%define bind_version 32:9.16.50-1
 
 %if 0%{?fedora} >= 31 || 0%{?rhel} > 8
 %if 0%{?fedora} >= 40 || 0%{?rhel} >= 10
@@ -20,7 +20,7 @@
 
 Name:           bind-dyndb-ldap
 Version:        11.11
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        LDAP back-end plug-in for BIND
 
 License:        GPLv2+
@@ -126,6 +126,10 @@ sed -i.bak -e "$SEDSCRIPT" /etc/named.conf
 
 
 %changelog
+* Fri Jul 10 2026 Fedor Vorobev <fvorobev@redhat.com> - 11.11-4
+- Release bump in order to rebuild with bind v9.16.50.
+  Resolves: RHEL-193133
+
 * Thu Mar 20 2025 Thomas Woerner <twoerner@redhat.com> - 11.11-3
 - Drop obsoletes for bind, switch back to bind 32:9.16.23-19 requirement
   Resolves: RHEL-80345
